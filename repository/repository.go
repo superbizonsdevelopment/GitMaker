@@ -4,7 +4,7 @@ var(
 	Repositories = make(map[string]Repository)
 )
 
-type Repository struct{
+type Repository struct {
 	Name string
 	Author string
 	URL string
