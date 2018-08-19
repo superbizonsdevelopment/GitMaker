@@ -12,18 +12,30 @@ app.on('ready', function(){
   mainWindow = new BrowserWindow({});
 
   mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname + "/window", 'loginWindow.html'),
+    pathname: path.join(__dirname + "/window", 'mainWindow.html'),
     protocol: 'file:',
     slashes: true
   }));
+
+  const mainMenuTemplate =  [
+    {
+        label: 'File',
+        submenu: [
+            {
+                label: 'Quit',
+                click() {
+                    app.quit();
+                }
+            }
+        ]
+    }
+];
+
+if (process.platform == 'darwin') {
+    mainMenuTemplate.unshift({});
+}
+
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
 
   Menu.setApplicationMenu(mainMenu);
 });
-
-//Create menu template
-const mainMenuTemplate = [
-  {
-    label:'File'
-  }
-];
