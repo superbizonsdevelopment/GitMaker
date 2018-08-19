@@ -12,11 +12,11 @@ app.on('ready', function(){
   mainWindow = new BrowserWindow({});
 
   mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname + "/window", 'mainWindow.html'),
+    pathname: path.join(__dirname + "/window", 'loginWindow.html'),
     protocol: 'file:',
     slashes: true
   }));
-
+/*
   const mainMenuTemplate =  [
     {
         label: 'File',
@@ -37,5 +37,5 @@ if (process.platform == 'darwin') {
 
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
 
-  Menu.setApplicationMenu(mainMenu);
+  Menu.setApplicationMenu(mainMenu); */
 });

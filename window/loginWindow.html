@@ -5,17 +5,21 @@
   <link rel="stylesheet" type="text/css" href="style/loginWindow.css">
 </head>
 <body>
-  <div class="container">
-    <label for="uname"><b>Username</b></label>
-    <input type="text" placeholder="Enter Username" name="uname" required>
-
-    <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" required>
-
-    <button type="submit">Login</button>
-    <label>
-      <input type="checkbox" checked="checked" name="remember"> Remember me
-    </label>
+  <div class="loginbox">
+    <img src="graphic/guest_avatar.png" class="avatar"/>
+    <h1>Login Here</h1>
+    <form>
+      <p>Username</p>
+      <input type="text" id="loginField" placeholder="Enter Username"/>
+      <p>Password</p>
+      <input type="password" id="passwordField" placeholder="Enter Password"/>
+      <input type="submit" id="loginButton" value="LOGIN"/>
+      <a href="#">Lost your password?</a><br>
+      <a href="#">Don't have an account?<a/>
+    </form>
   </div>
 </body>
+<script>
+  require("./script/loginWindowManager.js");
+</script>
 </html>
