@@ -1,0 +1,14 @@
+{
+  "name": "GitMaker",
+  "version": "1.0.0",
+  "description": "GitMaker desktop app",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "SuperbizonsDeveloment",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "2.0.7"
+  }
+}
