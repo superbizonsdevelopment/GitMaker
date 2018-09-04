@@ -1,12 +1,13 @@
 const electron = require('electron');
 const url = require('url');
 const path = require('path');
-var fileManager = require(__dirname + "/script/fileManager.js");
-var repositoryManager = require(__dirname + "/script/repositoryManager.js");
+const fileManager = require(__dirname + "/script/fileManager.js");
+const repositoryManager = require(__dirname + "/script/repositoryManager.js");
+const repositoryViewManager = require(__dirname + "/script/repositoryViewManager.js");
 
 const {app, BrowserWindow, Menu} = electron;
 
-let createRepositoryWindow;
+let windowToLoad;
 
 app.on('ready', function() {
 
@@ -21,9 +22,14 @@ app.on('ready', function() {
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
   Menu.setApplicationMenu(mainMenu);
 
-  //repositoryManager.isRepositoryExists('exdns');
-  //fileManager.createAppDirectory();
-  //fileManager.createRepositoriesFile();
+  fileManager.createAppDirectory();
+  fileManager.createRepositoriesFile();
+
+  fileManager.getRepositoriesFromFile();
+
+  var repositoriesInArray = new Array('januszowe', 'zajebiste');
+
+  repositoryViewManager.showSavedRepositories(repositoriesInArray);
 });
 
 app.on('window-all-closed', () => {
@@ -34,14 +40,14 @@ app.on('window-all-closed', () => {
     }
 })
 
-function loadCreateRepositoryWindow() {
-  createRepositoryWindow = new BrowserWindow({
+function loadWindow(name) {
+  windowToLoad = new BrowserWindow({
     width: 400,
     height: 400
   });
 
-  createRepositoryWindow.loadURL(url.format({
-    pathname: path.join(__dirname + "/window", 'createFieldForRepositoryWindow.html'),
+  windowToLoad.loadURL(url.format({
+    pathname: path.join(__dirname + "/window", name + '.html'),
     protocol: 'file:',
     slashes: true
   }));
@@ -49,8 +55,19 @@ function loadCreateRepositoryWindow() {
 
 const mainMenuTemplate =  [
   {
-    label: 'File',
+    label: 'GitMaker',
     submenu: [
+      {
+        label: 'About GitMaker',
+        click() { loadWindow('aboutWindow') }
+      },
+      {
+        label: 'View License',
+        click() { loadWindow('licenseWindow') }
+      },
+      {
+        label: 'Version 1.0.0'
+      },
       {
         label: 'Quit',
         accelerator: 'CmdOrCtrl+Q',
@@ -63,7 +80,7 @@ const mainMenuTemplate =  [
     submenu: [
       {
         label: 'Create',
-        click() { loadCreateRepositoryWindow(); }
+        click() { loadWindow('createFieldForRepositoryWindow'); }
       },
       {
         label: 'Delete',
@@ -72,3 +89,5 @@ const mainMenuTemplate =  [
     ]
   }
 ];
+
+module.exports = loadWindow()
