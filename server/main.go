@@ -5,6 +5,7 @@ import(
   "./util"
   "net/http"
   "./constants"
+  "./handler"
 )
 
 func main() {
@@ -16,15 +17,7 @@ func main() {
 
   mux := http.NewServeMux()
 
-  mux.HandleFunc("/gccs", func(w http.ResponseWriter, r *http.Request){
-
-    switch r.Method {
-    case "GET":
-      break
-    case "POST":
-
-    }
-  })
+  mux.HandleFunc("/gccs", handler.HandleMainFunction)
 
   http.ListenAndServe(":8080", mux)
 }
