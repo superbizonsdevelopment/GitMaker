@@ -1,10 +1,10 @@
 package handler
 
 import (
-	"context"
 	"fmt"
+  "context"
+  "net/http"
 	"github.com/google/go-github/github"
-	"net/http"
 )
 
 var (
@@ -26,12 +26,14 @@ func HandleMainFunction(w http.ResponseWriter, r *http.Request) {
 		if repoIsAuthorIsAnOrganization == "yes" {
 			//If author is an organnization
 
-	     isRXOOA, repoLink := isRepositoryExistOnOrganizationAccount(repoName)
+	     isRXOOA, repoLink := isRepositoryExistOnOrganizationAccount(repoName, repoAuthor)
 
        if isRXOOA == false {
          //send packet then repo isn't exist!
          return
        }
+
+       fmt.Println(repoLink)
 
        //switch on sh program with link to repo argument
 
@@ -41,7 +43,7 @@ func HandleMainFunction(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func isRepositoryExistOnOrganizationAccount(repoName string) (bool, string) {
+func isRepositoryExistOnOrganizationAccount(repoName string, repoAuthor string) (bool, string) {
   client := github.NewClient(nil)
 
   opt := &github.RepositoryListByOrgOptions{Type: "public"}
@@ -53,5 +55,5 @@ func isRepositoryExistOnOrganizationAccount(repoName string) (bool, string) {
       return true, *repo.URL
     }
   }
-  return false, nil
+  return false, ""
 }
