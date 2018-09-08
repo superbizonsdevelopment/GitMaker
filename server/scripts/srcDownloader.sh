@@ -1,1 +1,2 @@
-echo "Downloading src from "
+#!/bin/sh
+echo "Downloading src from: $1"

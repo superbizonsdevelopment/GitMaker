@@ -1,18 +1,18 @@
 package main
 
 import (
+  "log"
+  "./util"
+  "net/http"
+  "./handler"
 	"./constants"
-	"./handler"
-	"./util"
-	"log"
-	"net/http"
 )
 
 func main() {
 	log.Println("Starting Gitmaker Code Compilation Server!!!")
 	log.Println("Creating Directories!")
 	util.CreateDirIfNotExist(constants.AppDir)
-	util.CreateDirIfNotExist(constants.AppsDir)
+	util.CreateDirIfNotExist(constants.ClonedAppsDir)
 	log.Println("All Directories created!")
 
 	mux := http.NewServeMux()

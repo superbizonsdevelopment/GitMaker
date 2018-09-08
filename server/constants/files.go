@@ -2,5 +2,5 @@ package constants
 
 const (
 	AppDir  = "/Applications/GitMaker-Server"
-	AppsDir = "/Applications/GitMaker-Server/apps"
+	ClonedAppsDir = "/Applications/GitMaker-Server/apps"
 )

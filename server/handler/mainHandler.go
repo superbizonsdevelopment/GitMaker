@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+  "os/exec"
   "context"
   "net/http"
 	"github.com/google/go-github/github"
@@ -25,14 +26,21 @@ func HandleMainFunction(w http.ResponseWriter, r *http.Request) {
 	     isRXOOA, repoLink := isRepositoryExistOnOrganizationAccount(repoName, repoAuthor)
 
        if isRXOOA == false {
-         //send packet then repo isn't exist!
-
+         fmt.Fprintf(w, "Repository isn't exists!!!\n")
          return
        }
 
-       fmt.Println(repoLink)
+       cmd := exec.Command("./srcDownloader.sh", repoLink)
+       cmd.Dir = "./scripts"
 
-       //switch on sh program with link to repo argument
+       out, err := cmd.Output()
+
+       if err != nil {
+         fmt.Println(err.Error())
+         return
+       }
+       fmt.Println(repoLink)
+       fmt.Println(string(out))
 
 		} else if repoIsAuthorIsAnOrganization == "no" {
 
@@ -49,7 +57,7 @@ func isRepositoryExistOnOrganizationAccount(repoName string, repoAuthor string) 
 
   for _, repo := range repos {
     if repoName == *repo.Name {
-      return true, *repo.URL
+      return true, *repo.CloneURL
     }
   }
   return false, ""
