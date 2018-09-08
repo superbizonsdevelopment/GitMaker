@@ -1,23 +1,23 @@
 package main
 
-import(
-  "log"
-  "./util"
-  "net/http"
-  "./constants"
-  "./handler"
+import (
+	"./constants"
+	"./handler"
+	"./util"
+	"log"
+	"net/http"
 )
 
 func main() {
-  log.Println("Starting Gitmaker Code Compilation Server!!!")
-  log.Println("Creating Directories!")
-  util.CreateDirIfNotExist(constants.AppDir)
-  util.CreateDirIfNotExist(constants.AppsDir)
-  log.Println("All Directories created!")
+	log.Println("Starting Gitmaker Code Compilation Server!!!")
+	log.Println("Creating Directories!")
+	util.CreateDirIfNotExist(constants.AppDir)
+	util.CreateDirIfNotExist(constants.AppsDir)
+	log.Println("All Directories created!")
 
-  mux := http.NewServeMux()
+	mux := http.NewServeMux()
 
-  mux.HandleFunc("/gccs", handler.HandleMainFunction)
+	mux.HandleFunc("/gccs", handler.HandleMainFunction)
 
-  http.ListenAndServe(":8080", mux)
+	http.ListenAndServe(":8080", mux)
 }
