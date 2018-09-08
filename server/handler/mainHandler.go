@@ -7,10 +7,6 @@ import (
 	"github.com/google/go-github/github"
 )
 
-var (
-  repoLink = ""
-)
-
 func HandleMainFunction(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		return
@@ -30,6 +26,7 @@ func HandleMainFunction(w http.ResponseWriter, r *http.Request) {
 
        if isRXOOA == false {
          //send packet then repo isn't exist!
+
          return
        }
 
