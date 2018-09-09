@@ -2,12 +2,9 @@ package handler
 
 import (
 	"fmt"
-	"time"
-	"bytes"
 	"../util"
   "context"
   "net/http"
-	"io/ioutil"
 	"../manager"
 	"../constants"
 	"github.com/google/go-github/github"
@@ -42,7 +39,7 @@ func HandleMainFunction(w http.ResponseWriter, r *http.Request) {
 
 			 if  repoLanguage == "Go" {
 			 		mainFile := util.GetMainFileFromClonedGitProject(util.GetClonedGitProjectPath(repoName), repoName)
-					fmt.Printf("Main file: %v\n", mainFile)
+
 					if mainFile == "" {
 						fmt.Fprintf(w, "Can't find main file!\n")
 						fmt.Println("Can't find main file!\n")
@@ -51,9 +48,9 @@ func HandleMainFunction(w http.ResponseWriter, r *http.Request) {
 
 					manager.UseBuildGoProjectScript(mainFile, repoName)
 
-					DownloadFile(w, r, repoName)
+					downloadFile(w, r, repoName)
 			 } else if repoLanguage == "JavaScript" {
-				 fmt.Fprintf(w, "JavaScript is can't compiled!\n")
+				 fmt.Fprintf(w, "JavaScript can't compiled!\n")
 				 return
 			 }
 
@@ -78,10 +75,7 @@ func isRepositoryExistOnOrganizationAccount(repoName string, repoAuthor string) 
   return false, "", ""
 }
 
-func DownloadFile(w http.ResponseWriter, r *http.Request, repoName string) {
-	data, err := ioutil.ReadFile(constants.ClonedReposDir + "/" + repoName)
-  if err != nil {
-		fmt.Fprint(w, err)
-	}
-  http.ServeContent(w, r, repoName, time.Now(),   bytes.NewReader(data))
+func downloadFile(w http.ResponseWriter, r *http.Request, repoName string) {
+	fmt.Println("File: ", constants.ClonedReposDir + "/" + repoName)
+  http.ServeFile(w, r, constants.ClonedReposDir + "/" + repoName)
 }
