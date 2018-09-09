@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
   "os/exec"
+	"../util"
   "context"
   "net/http"
 	"github.com/google/go-github/github"
@@ -23,7 +24,7 @@ func HandleMainFunction(w http.ResponseWriter, r *http.Request) {
 		if repoIsAuthorIsAnOrganization == "yes" {
 			//If author is an organnization
 
-	     isRXOOA, repoLink := isRepositoryExistOnOrganizationAccount(repoName, repoAuthor)
+	     isRXOOA, repoLink, repoLanguage := isRepositoryExistOnOrganizationAccount(repoName, repoAuthor)
 
        if isRXOOA == false {
          fmt.Fprintf(w, "Repository isn't exists!!!\n")
@@ -42,13 +43,40 @@ func HandleMainFunction(w http.ResponseWriter, r *http.Request) {
        fmt.Println(repoLink)
        fmt.Println(string(out))
 
+			 fmt.Println(util.GetClonedGitProjectPath(repoName))
+			 fmt.Println(repoLanguage)
+
+			 if  repoLanguage == "Go" {
+			 		mainFile := util.GetMainFileFromClonedGitProject(util.GetClonedGitProjectPath(repoName), repoName)
+					fmt.Printf("Main file: %v\n", mainFile)
+					if mainFile == "" {
+						fmt.Fprintf(w, "Can't find main file!\n")
+						fmt.Println("Can't find main file!\n")
+						return
+					}
+
+					cmd = exec.Command("./buildGoProjects.sh", mainFile)
+					cmd.Dir = "./scripts"
+					out, err := cmd.Output()
+
+					if err != nil {
+						fmt.Println(err.Error())
+						return
+					}
+
+					fmt.Println(string(out))
+			 } else if repoLanguage == "JavaScript" {
+				 fmt.Fprintf(w, "JavaScript is can't compiled!\n")
+				 return
+			 }
+
 		} else if repoIsAuthorIsAnOrganization == "no" {
 
 		}
 	}
 }
 
-func isRepositoryExistOnOrganizationAccount(repoName string, repoAuthor string) (bool, string) {
+func isRepositoryExistOnOrganizationAccount(repoName string, repoAuthor string) (bool, string, string) {
   client := github.NewClient(nil)
 
   opt := &github.RepositoryListByOrgOptions{Type: "public"}
@@ -57,8 +85,8 @@ func isRepositoryExistOnOrganizationAccount(repoName string, repoAuthor string) 
 
   for _, repo := range repos {
     if repoName == *repo.Name {
-      return true, *repo.CloneURL
+      return true, *repo.CloneURL, *repo.Language
     }
   }
-  return false, ""
+  return false, "", ""
 }
