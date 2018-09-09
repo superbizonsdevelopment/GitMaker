@@ -5,8 +5,8 @@ import (
   "os/exec"
 )
 
-func UseBuildGoProjectScript(mainFile string) {
-  cmd := exec.Command("./buildGoProjects.sh", mainFile)
+func UseBuildGoProjectScript(mainFile string, repoName string) {
+  cmd := exec.Command("./buildGoProjects.sh", mainFile, repoName)
   cmd.Dir = "./scripts"
   out, err := cmd.Output()
 

@@ -18,6 +18,8 @@ func CreateDirIfNotExist(dir string) {
 		log.Printf("Created %s package!", dir)
 	}
 
+	src, err = os.Stat(dir)
+
 	if src.Mode().IsRegular() {
 		log.Printf(dir, " already exist as a file!")
 	}

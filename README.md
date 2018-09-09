@@ -8,3 +8,9 @@
   * URL
 
 # API
+
+You can use this by
+
+```
+name
+```

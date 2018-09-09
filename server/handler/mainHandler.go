@@ -45,7 +45,7 @@ func HandleMainFunction(w http.ResponseWriter, r *http.Request) {
 						return
 					}
 
-					manager.UseBuildGoProjectScript(mainFile)
+					manager.UseBuildGoProjectScript(mainFile, repoName)
 			 } else if repoLanguage == "JavaScript" {
 				 fmt.Fprintf(w, "JavaScript is can't compiled!\n")
 				 return
