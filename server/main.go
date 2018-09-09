@@ -12,7 +12,7 @@ func main() {
 	log.Println("Starting Gitmaker Code Compilation Server!!!")
 	log.Println("Creating Directories!")
 	util.CreateDirIfNotExist(constants.AppDir)
-	util.CreateDirIfNotExist(constants.ClonedAppsDir)
+	util.CreateDirIfNotExist(constants.ClonedReposDir)
 	log.Println("All Directories created!")
 
 	mux := http.NewServeMux()

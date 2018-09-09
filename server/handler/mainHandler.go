@@ -2,10 +2,14 @@ package handler
 
 import (
 	"fmt"
+	"time"
+	"bytes"
 	"../util"
   "context"
   "net/http"
+	"io/ioutil"
 	"../manager"
+	"../constants"
 	"github.com/google/go-github/github"
 )
 
@@ -46,6 +50,8 @@ func HandleMainFunction(w http.ResponseWriter, r *http.Request) {
 					}
 
 					manager.UseBuildGoProjectScript(mainFile, repoName)
+
+					DownloadFile(w, r, repoName)
 			 } else if repoLanguage == "JavaScript" {
 				 fmt.Fprintf(w, "JavaScript is can't compiled!\n")
 				 return
@@ -70,4 +76,12 @@ func isRepositoryExistOnOrganizationAccount(repoName string, repoAuthor string) 
     }
   }
   return false, "", ""
+}
+
+func DownloadFile(w http.ResponseWriter, r *http.Request, repoName string) {
+	data, err := ioutil.ReadFile(constants.ClonedReposDir + "/" + repoName)
+  if err != nil {
+		fmt.Fprint(w, err)
+	}
+  http.ServeContent(w, r, repoName, time.Now(),   bytes.NewReader(data))
 }

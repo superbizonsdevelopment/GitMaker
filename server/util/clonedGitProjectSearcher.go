@@ -7,14 +7,14 @@ import(
 )
 
 func GetClonedGitProjectPath(repoName string) string {
-  files, err := ioutil.ReadDir(constants.ClonedAppsDir)
+  files, err := ioutil.ReadDir(constants.ClonedReposDir)
     if err != nil {
       log.Fatal(err)
     }
 
     for _, f := range files {
       if f.Name() == repoName && f.IsDir() {
-        return constants.ClonedAppsDir + "/" + f.Name()
+        return constants.ClonedReposDir + "/" + f.Name()
       }
     }
 
@@ -28,7 +28,7 @@ func GetMainFileFromClonedGitProject(path string, repoName string) string {
   }
 
   for _, f := range gitFiles {
-    if f.Name() == "main.go"  || f.Name() == repoName + ".go" || f.Name() == "server.go"{
+    if f.Name() == "main.go"  || f.Name() == repoName + ".go" {
       return f.Name()
     }
   }
