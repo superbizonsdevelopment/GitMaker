@@ -2,10 +2,10 @@ package handler
 
 import (
 	"fmt"
-  "os/exec"
 	"../util"
   "context"
   "net/http"
+	"../manager"
 	"github.com/google/go-github/github"
 )
 
@@ -31,17 +31,7 @@ func HandleMainFunction(w http.ResponseWriter, r *http.Request) {
          return
        }
 
-       cmd := exec.Command("./srcDownloader.sh", repoLink)
-       cmd.Dir = "./scripts"
-
-       out, err := cmd.Output()
-
-       if err != nil {
-         fmt.Println(err.Error())
-         return
-       }
-       fmt.Println(repoLink)
-       fmt.Println(string(out))
+       manager.UseSrcDownloaderScript(repoLink)
 
 			 fmt.Println(util.GetClonedGitProjectPath(repoName))
 			 fmt.Println(repoLanguage)
@@ -55,16 +45,7 @@ func HandleMainFunction(w http.ResponseWriter, r *http.Request) {
 						return
 					}
 
-					cmd = exec.Command("./buildGoProjects.sh", mainFile)
-					cmd.Dir = "./scripts"
-					out, err := cmd.Output()
-
-					if err != nil {
-						fmt.Println(err.Error())
-						return
-					}
-
-					fmt.Println(string(out))
+					manager.UseBuildGoProjectScript(mainFile)
 			 } else if repoLanguage == "JavaScript" {
 				 fmt.Fprintf(w, "JavaScript is can't compiled!\n")
 				 return
