@@ -76,6 +76,5 @@ func isRepositoryExistOnOrganizationAccount(repoName string, repoAuthor string) 
 }
 
 func downloadFile(w http.ResponseWriter, r *http.Request, repoName string) {
-	fmt.Println("File: ", constants.ClonedReposDir + "/" + repoName)
   http.ServeFile(w, r, constants.ClonedReposDir + "/" + repoName)
 }

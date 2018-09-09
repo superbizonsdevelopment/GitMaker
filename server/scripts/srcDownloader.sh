@@ -4,7 +4,7 @@ gitProjectToDownload=$1
 
 echo "Downloading src from: $gitProjectToDownload"
 
-cd /Applications/GitMaker-Server/apps
+cd /Applications/GitMaker-Server/repos
 
 git clone $gitProjectToDownload
 
