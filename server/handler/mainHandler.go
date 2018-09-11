@@ -3,11 +3,9 @@ package handler
 import (
 	"fmt"
 	"../util"
-  "context"
   "net/http"
 	"../manager"
 	"../constants"
-	"github.com/google/go-github/github"
 )
 
 func HandleMainFunction(w http.ResponseWriter, r *http.Request) {
@@ -25,9 +23,9 @@ func HandleMainFunction(w http.ResponseWriter, r *http.Request) {
 		if repoIsAuthorIsAnOrganization == "yes" {
 			//If author is an organnization
 
-	     isRXOOA, repoLink, repoLanguage := isRepositoryExistOnOrganizationAccount(repoName, repoAuthor)
+	     isREOOA, repoLink, repoLanguage := manager.IsRepositoryExistOnOrganizationAccount(repoName, repoAuthor)
 
-       if isRXOOA == false {
+       if isREOOA == false {
          fmt.Fprintf(w, "Repository isn't exists!!!\n")
          return
        }
@@ -48,33 +46,26 @@ func HandleMainFunction(w http.ResponseWriter, r *http.Request) {
 
 					manager.UseBuildGoProjectScript(mainFile, repoName)
 
-					downloadFile(w, r, repoName)
+					sendFile(w, r, repoName)
+
+					manager.UseUnnecesserySrcRemover(repoName)
 			 } else if repoLanguage == "JavaScript" {
 				 fmt.Fprintf(w, "JavaScript can't compiled!\n")
 				 return
 			 }
 
 		} else if repoIsAuthorIsAnOrganization == "no" {
+			isREOUA, repoLink, repoLanguage := manager.IsRepositoryExistsOnUserAccount(repoName, repoAuthor)
 
+			if isREOUA == false {
+				fmt.Fprintf(w, "Repository isn't exists!!!\n")
+				return
+			}
 		}
 	}
 }
 
-func isRepositoryExistOnOrganizationAccount(repoName string, repoAuthor string) (bool, string, string) {
-  client := github.NewClient(nil)
-
-  opt := &github.RepositoryListByOrgOptions{Type: "public"}
-
-  repos, _, _ := client.Repositories.ListByOrg(context.Background(), repoAuthor, opt)
-
-  for _, repo := range repos {
-    if repoName == *repo.Name {
-      return true, *repo.CloneURL, *repo.Language
-    }
-  }
-  return false, "", ""
-}
-
-func downloadFile(w http.ResponseWriter, r *http.Request, repoName string) {
+func sendFile(w http.ResponseWriter, r *http.Request, repoName string) {
+	fmt.Println(constants.ClonedReposDir + "/" + repoName)
   http.ServeFile(w, r, constants.ClonedReposDir + "/" + repoName)
 }

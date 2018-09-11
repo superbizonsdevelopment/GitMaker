@@ -31,3 +31,16 @@ func UseSrcDownloaderScript(repoLink string) {
   fmt.Println(repoLink)
   fmt.Println(string(out))
 }
+
+func UseUnnecesserySrcRemover(repoName string) {
+  cmd := exec.Command("./removeUnnecesserySrc.sh", repoName)
+  cmd.Dir = "./scripts"
+  out, err := cmd.Output()
+
+  if err != nil {
+    fmt.Println(err.Error())
+    return
+  }
+
+  fmt.Println(string(out))
+}
